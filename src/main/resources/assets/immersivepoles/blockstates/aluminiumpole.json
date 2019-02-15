@@ -3,23 +3,6 @@
 	"defaults": {},
 	"variants": {
 		"inventory": { "model":"immersivepoles:extendablepost/alu/post" },
-		
-		"__comment":"Why is this needed? Why doesnt it work without it? What the hell is this bullshit?",
-		"__comment":"Isnt forge supposed to generate all possible combinations?",
-		"__comment":"Is the documentation lying? Or am i doing something horribly wrong. Please tell me.",
-		"facing=north,flip=false,type=post": { "model":"immersivepoles:extendablepost/alu/post" },
-		"facing=north,flip=false,type=top": { "model":"immersivepoles:extendablepost/alu/post_cap" },
-		
-		"facing=north,flip=false,type=arm": { "model":"immersivepoles:extendablepost/alu/arm" },
-		"facing=east,flip=false,type=arm": { "model":"immersivepoles:extendablepost/alu/arm", "y": 90 },
-		"facing=south,flip=false,type=arm": { "model":"immersivepoles:extendablepost/alu/arm", "y": 180 },
-		"facing=west,flip=false,type=arm": { "model":"immersivepoles:extendablepost/alu/arm", "y": 270 },
-		
-		"facing=north,flip=true,type=arm": { "model":"immersivepoles:extendablepost/alu/arm", "x": 180 },
-		"facing=east,flip=true,type=arm": { "model":"immersivepoles:extendablepost/alu/arm", "x": 180, "y": 90 },
-		"facing=south,flip=true,type=arm": { "model":"immersivepoles:extendablepost/alu/arm", "x": 180, "y": 180 },
-		"facing=west,flip=true,type=arm": { "model":"immersivepoles:extendablepost/alu/arm", "x": 180, "y": 270 },
-		
 		"facing":{
 			"up":{},
 			"down":{},
