@@ -151,7 +151,25 @@ public class BlockPole extends IPBlock{
 	
 	@Override
 	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos){
+		if(worldIn.isAirBlock(pos.offset(EnumFacing.DOWN))){
+			dropBlockAsItem(worldIn, fromPos, state, 1);
+			worldIn.setBlockToAir(pos);
+			return;
+		}
 		
+		if(worldIn.isAirBlock(pos.offset(EnumFacing.UP))){
+			worldIn.setBlockState(pos, state.withProperty(TYPE, EnumPoleType.POST_TOP));
+			return;
+		}
+		
+		Block b=worldIn.getBlockState(pos.offset(EnumFacing.UP)).getBlock();
+		if(b instanceof BlockPole){
+			BlockPole p=(BlockPole)b;
+			
+			if(p==this){
+				worldIn.setBlockState(pos, state.withProperty(TYPE, EnumPoleType.POST), 2);
+			}
+		}
 	}
 	
 	static final AxisAlignedBB POST_SHAPE=new AxisAlignedBB(0.375F, 0.0F, 0.375F, 0.625F, 1.0F, 0.625F);

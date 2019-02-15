@@ -2,7 +2,7 @@
 #        Blocks         #
 #########################
 
-tile.immersivepoles.pole.name=Extendable Post
+tile.immersivepoles.polebase.name=Extendable Post
 tile.immersivepoles.woodpole.name=Wooden Post
 tile.immersivepoles.aluminiumpole.name=Aluminium Post
 tile.immersivepoles.steelpole.name=Steel Post

@@ -1,6 +1,6 @@
 {
 	"variants": {
-		"normal": { "model": "immersivepoles:extendablepost/postbase" },
+		"normal": { "model": "immersivepoles:extendablepost/polebase" },
 		"mat=woodpole,meta=meta0,type=woodpole": { "model": "immersivepoles:extendablepost/post" },
 		"mat=woodpole,meta=meta1,type=woodpole": { "model": "immersivepoles:extendablepost/post" },
 		"mat=woodpole,meta=meta2,type=woodpole": { "model": "immersivepoles:extendablepost/arm" },
