@@ -40,7 +40,7 @@ public class BlockExtendedPost extends IPBlock implements ITileEntityProvider{
 		setHardness(2.0F);
 		
 		setDefaultState(this.blockState.getBaseState()
-				.withProperty(TYPE, EnumMetaType.META_0)
+				.withProperty(TYPE, EnumMetaType.POST_BASE)
 				);
 	}
 	
@@ -52,7 +52,7 @@ public class BlockExtendedPost extends IPBlock implements ITileEntityProvider{
 	@Override
 	public IBlockState getStateFromMeta(int meta){
 		if(meta<0 || meta>=EnumMetaType.values().length)
-			return getDefaultState().withProperty(TYPE, EnumMetaType.META_0);
+			return getDefaultState().withProperty(TYPE, EnumMetaType.POST_BASE);
 		
 		return getDefaultState().withProperty(TYPE, EnumMetaType.values()[meta]);
 	}
@@ -110,14 +110,14 @@ public class BlockExtendedPost extends IPBlock implements ITileEntityProvider{
 	@Override
 	public void breakBlock(World worldIn, BlockPos pos, IBlockState state){
 		switch(state.getValue(TYPE)){
-			case META_0:{
+			case POST_BASE:{
 				BlockPos tmp=pos.offset(EnumFacing.UP);
 				if(worldIn.getTileEntity(tmp) instanceof TEExtendedPost){
 					worldIn.setBlockToAir(tmp);
 				}
 				break;
 			}
-			case META_1:{
+			case POST:{
 				BlockPos tmp=pos.offset(EnumFacing.DOWN);
 				if(worldIn.getTileEntity(tmp) instanceof TEExtendedPost){
 					worldIn.setBlockToAir(tmp);
@@ -127,7 +127,7 @@ public class BlockExtendedPost extends IPBlock implements ITileEntityProvider{
 				for(EnumFacing facing:dirs){
 					BlockPos offset=pos.offset(facing);
 					IBlockState offState=worldIn.getBlockState(offset);
-					if(offState.getBlock()==this && offState.getValue(TYPE).ordinal()>=EnumMetaType.META_2.ordinal()){
+					if(offState.getBlock()==this && offState.getValue(TYPE).ordinal()>=EnumMetaType.POST_TOP.ordinal()){
 						worldIn.setBlockToAir(offset);
 					}
 				}
@@ -136,7 +136,7 @@ public class BlockExtendedPost extends IPBlock implements ITileEntityProvider{
 			default:return;
 		}
 		
-		if((!worldIn.isRemote && !worldIn.restoringBlockSnapshots) && state.getValue(TYPE)==EnumMetaType.META_0 && worldIn.getGameRules().getBoolean("doTileDrops")){
+		if((!worldIn.isRemote && !worldIn.restoringBlockSnapshots) && state.getValue(TYPE)==EnumMetaType.POST_BASE && worldIn.getGameRules().getBoolean("doTileDrops")){
 			worldIn.spawnEntity(new EntityItem(worldIn, pos.getX(), pos.getY(), pos.getZ(), new ItemStack(this, 1, 0)));
 		}
 		
@@ -148,7 +148,7 @@ public class BlockExtendedPost extends IPBlock implements ITileEntityProvider{
 		if(!Utils.isHammer(playerIn.getHeldItem(EnumHand.MAIN_HAND))) return false;
 		
 		switch(state.getValue(TYPE)){
-			case META_1:{
+			case POST:{
 				EnumFacing fac0=facing;
 				EnumFacing fac1=facing.getOpposite();
 				BlockPos offset0=pos.offset(fac0);
@@ -169,7 +169,7 @@ public class BlockExtendedPost extends IPBlock implements ITileEntityProvider{
 					worldIn.setBlockState(offset0, getStateFromMeta(facing.ordinal()), 3);
 				break;
 			}
-			case META_2:case META_3:case META_4:case META_5:{
+			case POST_TOP:case ARM_NORTH:case ARM_EAST:case ARM_SOUTH:{
 				worldIn.setBlockToAir(pos);
 				break;
 			}
@@ -213,19 +213,19 @@ public class BlockExtendedPost extends IPBlock implements ITileEntityProvider{
 	AxisAlignedBB stateBounds(IBlockAccess world, BlockPos pos, IBlockState state){
 		EnumMetaType meta=state.getValue(TYPE);
 		switch(meta){
-			case META_0:return new AxisAlignedBB(0.3125F, 0.0F, 0.3125F, 0.6875F, 1.0F, 0.6875F);
-			case META_1:{
-				float minX=meta==EnumMetaType.META_4?0.0F:0.3125F;
-				float minZ=meta==EnumMetaType.META_2?0.0F:0.3125F;
-				float maxX=meta==EnumMetaType.META_5?1.0F:0.6875F;
-				float maxZ=meta==EnumMetaType.META_3?1.0F:0.6875F;
+			case POST_BASE:return new AxisAlignedBB(0.3125F, 0.0F, 0.3125F, 0.6875F, 1.0F, 0.6875F);
+			case POST:{
+				float minX=meta==EnumMetaType.ARM_EAST?0.0F:0.3125F;
+				float minZ=meta==EnumMetaType.POST_TOP?0.0F:0.3125F;
+				float maxX=meta==EnumMetaType.ARM_SOUTH?1.0F:0.6875F;
+				float maxZ=meta==EnumMetaType.ARM_NORTH?1.0F:0.6875F;
 				
 				return new AxisAlignedBB(minX, 0.0F, minZ, maxX, 1.0F, maxZ);
 			}
-			case META_2:
-			case META_3:
-			case META_4:
-			case META_5:{
+			case POST_TOP:
+			case ARM_NORTH:
+			case ARM_EAST:
+			case ARM_SOUTH:{
 				float minY=0.5F;
 				float maxY=1.0F;
 				if(canArmConnectToBlock(world, pos.offset(EnumFacing.DOWN), true)){
@@ -236,10 +236,10 @@ public class BlockExtendedPost extends IPBlock implements ITileEntityProvider{
 						maxY=1.0F;
 				}
 				
-				float minX=meta==EnumMetaType.META_5?0.0F:0.3125F;
-				float minZ=meta==EnumMetaType.META_3?0.0F:0.3125F;
-				float maxX=meta==EnumMetaType.META_4?1.0F:0.6875F;
-				float maxZ=meta==EnumMetaType.META_2?1.0F:0.6875F;
+				float minX=meta==EnumMetaType.ARM_SOUTH?0.0F:0.3125F;
+				float minZ=meta==EnumMetaType.ARM_NORTH?0.0F:0.3125F;
+				float maxX=meta==EnumMetaType.ARM_EAST?1.0F:0.6875F;
+				float maxZ=meta==EnumMetaType.POST_TOP?1.0F:0.6875F;
 				
 				return new AxisAlignedBB(minX,minY,minZ,maxX,maxY,maxZ);
 			}

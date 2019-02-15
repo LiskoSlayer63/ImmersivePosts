@@ -42,7 +42,7 @@ public class BlockExtendablePost extends IPBlock implements IPostBlock{
 		setDefaultState(this.blockState.getBaseState()
 				.withProperty(TYPE, EnumPoleType.ARM)
 				.withProperty(MAT, EnumPoleMaterial.WOOD)
-				.withProperty(META, EnumMetaType.META_0)
+				.withProperty(META, EnumMetaType.POST_BASE)
 				);
 	}
 	
@@ -63,7 +63,7 @@ public class BlockExtendablePost extends IPBlock implements IPostBlock{
 	@Override
 	public IBlockState getStateFromMeta(int meta){
 		if(meta<0 || meta>=EnumMetaType.values().length){
-			return getDefaultState().withProperty(META, EnumMetaType.META_0)
+			return getDefaultState().withProperty(META, EnumMetaType.POST_BASE)
 			.withProperty(MAT, EnumPoleMaterial.WOOD);
 			
 		}else{
@@ -146,7 +146,7 @@ public class BlockExtendablePost extends IPBlock implements IPostBlock{
 					ImmersivePoles.log.debug("Hammered.");
 					
 					EnumMetaType m=state.getValue(META);
-					if(m==EnumMetaType.META_1 || m==EnumMetaType.META_2){
+					if(m==EnumMetaType.POST || m==EnumMetaType.POST_TOP){
 						int side=facing.ordinal();
 						BlockPos tmp=pos.add(facing.getDirectionVec());
 						
@@ -155,7 +155,7 @@ public class BlockExtendablePost extends IPBlock implements IPostBlock{
 							ImmersivePoles.log.debug("trigger0");
 						}
 						
-					}else if(m!=EnumMetaType.META_0){
+					}else if(m!=EnumMetaType.POST_BASE){
 						worldIn.setBlockToAir(pos);
 						ImmersivePoles.log.debug("trigger1");
 					}
@@ -212,11 +212,9 @@ public class BlockExtendablePost extends IPBlock implements IPostBlock{
 	}
 	
 	private void poke(IBlockAccess world, BlockPos curPos){
-		BlockPos abovePos=curPos.offset(EnumFacing.UP);
-		
 		EnumMetaType thisMeta=world.getBlockState(curPos).getValue(META);
 		
-		if(thisMeta==EnumMetaType.META_1 || thisMeta==EnumMetaType.META_2){
+		if(thisMeta==EnumMetaType.POST || thisMeta==EnumMetaType.POST_TOP){
 			IBlockState state=world.getBlockState(curPos);
 			if(BlockUtilities.getBlockFromDirection(world, curPos, EnumFacing.DOWN)!=this){
 				dropBlockAsItem((World) world, curPos, state, 1);
@@ -225,19 +223,20 @@ public class BlockExtendablePost extends IPBlock implements IPostBlock{
 			}
 		}
 		
+		BlockPos abovePos=curPos.offset(EnumFacing.UP);
 		Block above=BlockUtilities.getBlockFrom(world, abovePos);
 		int aboveMeta=above.getMetaFromState(world.getBlockState(abovePos));
 		
 		if(above==IEContent.blockWoodenDecoration && aboveMeta==BlockTypes_WoodenDecoration.FENCE.getMeta()){
 			BlockUtilities.setBlockStateAtDirection(((World)world), curPos, this.getStateFromMeta(1), EnumFacing.UP, 2);
-			if(thisMeta==EnumMetaType.META_2){
+			if(thisMeta==EnumMetaType.POST_TOP){
 				((World)world).setBlockState(curPos, this.getStateFromMeta(1), 3);
 			}
 			
-		}else if(thisMeta==EnumMetaType.META_1 && above.isAir(world.getBlockState(abovePos), world, abovePos)){
+		}else if(thisMeta==EnumMetaType.POST && above.isAir(world.getBlockState(abovePos), world, abovePos)){
 			((World)world).setBlockState(curPos, this.getStateFromMeta(2), 3);
 			
-		}else if(thisMeta.ordinal()>EnumMetaType.META_2.ordinal()){
+		}else if(thisMeta.ordinal()>EnumMetaType.POST_TOP.ordinal()){
 			int side=thisMeta.ordinal()-1;
 			EnumFacing f=EnumFacing.values()[side].getOpposite();
 			if(BlockUtilities.getBlockFromDirection(world, curPos, f)!=this){
@@ -298,21 +297,21 @@ public class BlockExtendablePost extends IPBlock implements IPostBlock{
 	AxisAlignedBB stateBounds(IBlockAccess world, BlockPos pos, IBlockState state){
 		EnumMetaType meta=state.getValue(META);
 		switch(meta){
-			case META_0:{
+			case POST_BASE:{
 				return new AxisAlignedBB(0.25F, 0.0F, 0.25F, 0.75F, 1.0F, 0.75F);
 			}
-			case META_1:case META_2:{
+			case POST:case POST_TOP:{
 				return new AxisAlignedBB(0.3125F, 0.0F, 0.3125F, 0.6875F, 1.0F, 0.6875F);
 			}
-			case META_3:case META_4:case META_5:case META_6:{
+			case ARM_NORTH:case ARM_EAST:case ARM_SOUTH:case ARM_WEST:{
 				float minY=0.34375F;
 				float maxY=1.0F;
 				
-				float minX=meta==EnumMetaType.META_6?-0.25F:0.3125F;
-				float maxX=meta==EnumMetaType.META_5? 1.25F:0.6875F;
+				float minX=meta==EnumMetaType.ARM_WEST?-0.25F:0.3125F;
+				float maxX=meta==EnumMetaType.ARM_SOUTH? 1.25F:0.6875F;
 				
-				float minZ=meta==EnumMetaType.META_4?-0.25F:0.3125F;
-				float maxZ=meta==EnumMetaType.META_3? 1.25F:0.6875F;
+				float minZ=meta==EnumMetaType.ARM_EAST?-0.25F:0.3125F;
+				float maxZ=meta==EnumMetaType.ARM_NORTH? 1.25F:0.6875F;
 				
 				if(canArmConnectToBlock(world, pos.offset(EnumFacing.DOWN), true)){
 					minY=0.0F;

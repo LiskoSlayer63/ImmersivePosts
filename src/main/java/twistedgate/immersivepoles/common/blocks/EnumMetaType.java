@@ -3,13 +3,13 @@ package twistedgate.immersivepoles.common.blocks;
 import net.minecraft.util.IStringSerializable;
 
 public enum EnumMetaType implements IStringSerializable{
-	META_0("meta0"),
-	META_1("meta1"),
-	META_2("meta2"),
-	META_3("meta3"),
-	META_4("meta4"),
-	META_5("meta5"),
-	META_6("meta6"),
+	POST_BASE("meta0"),
+	POST("meta1"),
+	POST_TOP("meta2"),
+	ARM_NORTH("meta3"),
+	ARM_EAST("meta4"),
+	ARM_SOUTH("meta5"),
+	ARM_WEST("meta6"),
 	META_7("meta7"),
 	META_8("meta8"),
 	META_9("meta9"),

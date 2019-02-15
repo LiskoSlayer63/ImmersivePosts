@@ -1,5 +1,6 @@
 package twistedgate.immersivepoles.common.blocks;
 
+import blusunrize.immersiveengineering.common.util.Utils;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
@@ -10,14 +11,18 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import twistedgate.immersivepoles.util.BlockUtilities;
 
 // Using IPBlock temporarly for debugging purposes!
 public class BlockPole extends IPBlock{
@@ -95,12 +100,12 @@ public class BlockPole extends IPBlock{
 			case 0: return state;
 			case 1: return state.withProperty(TYPE, EnumPoleType.POST_TOP);
 			
-			case 2: return state.withProperty(TYPE, EnumPoleType.ARM); // Using default Direction
+			case 2: return state.withProperty(TYPE, EnumPoleType.ARM).withProperty(DIRECTION, EnumFacing.NORTH);
 			case 3: return state.withProperty(TYPE, EnumPoleType.ARM).withProperty(DIRECTION, EnumFacing.EAST);
 			case 4: return state.withProperty(TYPE, EnumPoleType.ARM).withProperty(DIRECTION, EnumFacing.SOUTH);
 			case 5: return state.withProperty(TYPE, EnumPoleType.ARM).withProperty(DIRECTION, EnumFacing.WEST);
 			
-			case 6: return state.withProperty(TYPE, EnumPoleType.ARM).withProperty(FLIP, true); // Using default Direction
+			case 6: return state.withProperty(TYPE, EnumPoleType.ARM).withProperty(FLIP, true).withProperty(DIRECTION, EnumFacing.NORTH);
 			case 7: return state.withProperty(TYPE, EnumPoleType.ARM).withProperty(FLIP, true).withProperty(DIRECTION, EnumFacing.EAST);
 			case 8: return state.withProperty(TYPE, EnumPoleType.ARM).withProperty(FLIP, true).withProperty(DIRECTION, EnumFacing.SOUTH);
 			case 9: return state.withProperty(TYPE, EnumPoleType.ARM).withProperty(FLIP, true).withProperty(DIRECTION, EnumFacing.WEST);
@@ -143,32 +148,108 @@ public class BlockPole extends IPBlock{
 		return true;
 	}
 	
+	@Override
+	public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player){
+		return this.poleMaterial.getFenceItem();
+	}
+	
 	
 	@Override
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ){
-		return false;
+		if(!worldIn.isRemote){
+			ItemStack held=playerIn.getHeldItemMainhand();
+			if(EnumPoleMaterial.isFenceItem(held)){
+				
+				if(!held.isItemEqual(this.poleMaterial.getFenceItem())){
+					playerIn.sendMessage(new TextComponentString("Expected: "+this.poleMaterial.getFenceItem().getDisplayName()+"."));
+					return true;
+				}
+				
+				for(int i=1;i<(worldIn.getActualHeight()-pos.getY());i++){
+					BlockPos nPos=pos.add(0,i,0);
+					
+					if(worldIn.isAirBlock(nPos)){
+						IBlockState fb=null;
+						if(held.isItemEqual(EnumPoleMaterial.WOOD.getFenceItem()))
+							fb=IPStuff.woodPole.getDefaultState().withProperty(BlockPole.TYPE, EnumPoleType.POST_TOP);
+						
+						else if(held.isItemEqual(EnumPoleMaterial.ALU.getFenceItem()))
+							fb=IPStuff.aluPole.getDefaultState().withProperty(BlockPole.TYPE, EnumPoleType.POST_TOP);
+						
+						else if(held.isItemEqual(EnumPoleMaterial.STEEL.getFenceItem()))
+							fb=IPStuff.steelPole.getDefaultState().withProperty(BlockPole.TYPE, EnumPoleType.POST_TOP);
+						
+						if(worldIn.setBlockState(nPos, fb)){
+							if(!playerIn.capabilities.isCreativeMode){
+								held.shrink(1);
+							}
+						}
+						return true;
+						
+					}else if(!(worldIn.getBlockState(nPos).getBlock() instanceof BlockPole || worldIn.getBlockState(nPos)==this)){
+						return true;
+					}
+				}
+			}else if(Utils.isHammer(held)){
+				switch(state.getValue(TYPE)){
+					case POST:case POST_TOP:{
+						IBlockState defaultState=getDefaultState().withProperty(TYPE, EnumPoleType.ARM);
+						switch(facing){
+							case NORTH:case EAST:case SOUTH:case WEST:{
+								BlockPos nPos=pos.offset(facing);
+								
+								if(worldIn.isAirBlock(nPos)){
+									worldIn.setBlockState(nPos, defaultState.withProperty(DIRECTION, facing), 3);
+								}else{
+									IBlockState stat=worldIn.getBlockState(nPos);
+									if(stat.getBlock() instanceof BlockPole){
+										worldIn.setBlockToAir(nPos);
+									}
+								}
+								
+								return true;
+							}
+							default:return true;
+						}
+					}
+					case ARM:{
+						worldIn.setBlockToAir(pos);
+						return true;
+					}
+				}
+			}
+		}
+		
+		return Utils.isHammer(playerIn.getHeldItemMainhand()) || EnumPoleMaterial.isFenceItem(playerIn.getHeldItemMainhand());
 	}
 	
 	@Override
 	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos){
-		if(worldIn.isAirBlock(pos.offset(EnumFacing.DOWN))){
-			dropBlockAsItem(worldIn, fromPos, state, 1);
-			worldIn.setBlockToAir(pos);
-			return;
-		}
+		EnumPoleType thisType=state.getValue(TYPE);
 		
-		if(worldIn.isAirBlock(pos.offset(EnumFacing.UP))){
-			worldIn.setBlockState(pos, state.withProperty(TYPE, EnumPoleType.POST_TOP));
-			return;
-		}
-		
-		Block b=worldIn.getBlockState(pos.offset(EnumFacing.UP)).getBlock();
-		if(b instanceof BlockPole){
-			BlockPole p=(BlockPole)b;
-			
-			if(p==this){
-				worldIn.setBlockState(pos, state.withProperty(TYPE, EnumPoleType.POST), 2);
+		if(thisType!=EnumPoleType.ARM){
+			if(worldIn.isAirBlock(pos.offset(EnumFacing.DOWN))){
+				dropBlockAsItem(worldIn, fromPos, state, 1);
+				worldIn.setBlockToAir(pos);
+				return;
 			}
+		}
+		
+		Block aboveBlock=BlockUtilities.getBlockFromDirection(worldIn, pos, EnumFacing.UP);
+		if(thisType==EnumPoleType.POST && aboveBlock!=this){
+			worldIn.setBlockState(pos, state.withProperty(TYPE, EnumPoleType.POST_TOP));
+			
+		}else if(thisType==EnumPoleType.POST_TOP && aboveBlock==this){
+			worldIn.setBlockState(pos, state.withProperty(TYPE, EnumPoleType.POST));
+			
+		}else if(thisType==EnumPoleType.ARM){
+			EnumFacing f=state.getValue(DIRECTION).getOpposite();
+			if(BlockUtilities.getBlockFromDirection(worldIn, pos, f)!=this){
+				worldIn.setBlockToAir(pos);
+				return;
+			}
+			
+			worldIn.setBlockState(pos, state.withProperty(FLIP, BlockUtilities.getBlockFromDirection(worldIn, pos, EnumFacing.DOWN)!=Blocks.AIR), 3);
 		}
 	}
 	

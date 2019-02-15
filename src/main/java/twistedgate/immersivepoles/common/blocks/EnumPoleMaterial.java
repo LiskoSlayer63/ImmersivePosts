@@ -47,12 +47,16 @@ public enum EnumPoleMaterial implements IStringSerializable{
 	
 	
 	public static Block getFenceBlock(ItemStack stack){
+		if(stack==null || stack.isEmpty()) return null;
+		
 		IBlockState s=getFenceState(stack);
 		if(s!=null) return s.getBlock();
 		return null;
 	}
 	
 	public static IBlockState getFenceState(ItemStack stack){
+		if(stack==null || stack.isEmpty()) return null;
+		
 		for(EnumPoleMaterial mat:EnumPoleMaterial.values()){
 			if(stack.isItemEqual(mat.getFenceItem())){
 				return mat.getBlockState();
@@ -63,6 +67,8 @@ public enum EnumPoleMaterial implements IStringSerializable{
 	}
 	
 	public static boolean isFenceItem(ItemStack stack){
+		if(stack==null || stack.isEmpty()) return false;
+		
 		for(EnumPoleMaterial mat:values())
 			if(stack.isItemEqual(mat.getFenceItem())) return true;
 		
@@ -70,6 +76,8 @@ public enum EnumPoleMaterial implements IStringSerializable{
 	}
 	
 	public static ItemStack getFenceItem(ItemStack stack){
+		if(stack==null || stack.isEmpty()) return null;
+		
 		for(EnumPoleMaterial mat:values())
 			if(stack.isItemEqual(mat.getFenceItem())) return mat.getFenceItem();
 		
