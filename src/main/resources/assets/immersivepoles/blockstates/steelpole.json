@@ -1,0 +1,41 @@
+{
+	"forge_marker": 1,
+	"defaults": {},
+	"variants": {
+		"inventory": { "model":"immersivepoles:extendablepost/steel/post" },
+		
+		"__comment":"Why is this needed? Why doesnt it work without it? What the hell is this bullshit?",
+		"__comment":"Isnt forge supposed to generate all possible combinations?",
+		"__comment":"Is the documentation lying? Or am i doing something horribly wrong. Please tell me.",
+		"facing=north,flip=false,type=post": { "model":"immersivepoles:extendablepost/steel/post" },
+		"facing=north,flip=false,type=top": { "model":"immersivepoles:extendablepost/steel/post_cap" },
+		
+		"facing=north,flip=false,type=arm": { "model":"immersivepoles:extendablepost/steel/arm" },
+		"facing=east,flip=false,type=arm": { "model":"immersivepoles:extendablepost/steel/arm", "y": 90 },
+		"facing=south,flip=false,type=arm": { "model":"immersivepoles:extendablepost/steel/arm", "y": 180 },
+		"facing=west,flip=false,type=arm": { "model":"immersivepoles:extendablepost/steel/arm", "y": 270 },
+		
+		"facing=north,flip=true,type=arm": { "model":"immersivepoles:extendablepost/steel/arm", "x": 180 },
+		"facing=east,flip=true,type=arm": { "model":"immersivepoles:extendablepost/steel/arm", "x": 180, "y": 90 },
+		"facing=south,flip=true,type=arm": { "model":"immersivepoles:extendablepost/steel/arm", "x": 180, "y": 180 },
+		"facing=west,flip=true,type=arm": { "model":"immersivepoles:extendablepost/steel/arm", "x": 180, "y": 270 },
+		
+		"facing":{
+			"up":{},
+			"down":{},
+			"north":{},
+			"east":{ "y":90 },
+			"south":{ "y":180 },
+			"west":{ "y":270 }
+		},
+		"flip":{
+			"true":{ "x":180 },
+			"false":{}
+		},
+		"type":{
+			"arm":{ "model":"immersivepoles:extendablepost/steel/arm" },
+			"post":{ "model":"immersivepoles:extendablepost/steel/post" },
+			"top":{ "model":"immersivepoles:extendablepost/steel/post_cap" }
+		}
+	}
+}

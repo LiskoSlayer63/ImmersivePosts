@@ -1,0 +1,65 @@
+{
+    "__comment": "Model generated using MrCrayfish's Model Creator (https://mrcrayfish.com/tools?id=mc)",
+    "textures": {
+        "post_cap": "immersivepoles:blocks/metal_decoration2_steel_post",
+        "particle": "immersivepoles:blocks/metal_decoration2_steel_post"
+    },
+    "display": {
+        "gui": {
+            "rotation": [ 30, 45, 0 ],
+            "translation": [ 0, 0, 0 ],
+            "scale": [ 0.625, 0.625, 0.625 ]
+        },
+        "ground": {
+            "rotation": [ 0, 0, 0 ],
+            "translation": [ 0, 3, 0 ],
+            "scale": [ 0.25, 0.25, 0.25 ]
+        },
+        "fixed": {
+            "rotation": [ 0, 180, 0 ],
+            "translation": [ 0, 0, 0 ],
+            "scale": [ 1, 1, 1 ]
+        },
+        "head": {
+            "rotation": [ 0, 180, 0 ],
+            "translation": [ 0, 0, 0 ],
+            "scale": [ 1, 1, 1 ]
+        },
+        "firstperson_righthand": {
+            "rotation": [ 0, 315, 0 ],
+            "translation": [ 0, 2.5, 0 ],
+            "scale": [ 0.4, 0.4, 0.4 ]
+        },
+        "thirdperson_righthand": {
+            "rotation": [ 75, 315, 0 ],
+            "translation": [ 0, 2.5, 0 ],
+            "scale": [ 0.375, 0.375, 0.375 ]
+        }
+    },
+    "elements": [
+        {
+            "name": "post",
+            "from": [ 6, 0, 6 ], 
+            "to": [ 10, 14, 10 ], 
+            "faces": {
+                "north": { "texture": "#post_cap", "uv": [ 1, 3, 3, 11 ] },
+                "east": { "texture": "#post_cap", "uv": [ 1, 3, 3, 11 ] },
+                "south": { "texture": "#post_cap", "uv": [ 1, 3, 3, 11 ] },
+                "west": { "texture": "#post_cap", "uv": [ 1, 3, 3, 11 ] }
+            }
+        },
+        {
+            "name": "post_cap",
+            "from": [ 5, 14, 5 ], 
+            "to": [ 11, 16, 11 ], 
+            "faces": {
+                "north": { "texture": "#post_cap", "uv": [ 5, 15, 8, 16 ] },
+                "east": { "texture": "#post_cap", "uv": [ 5, 15, 8, 16 ] },
+                "south": { "texture": "#post_cap", "uv": [ 5, 15, 8, 16 ] },
+                "west": { "texture": "#post_cap", "uv": [ 5, 15, 8, 16 ] },
+                "up": { "texture": "#post_cap", "uv": [ 5, 13, 8, 16 ] },
+                "down": { "texture": "#post_cap", "uv": [ 5, 13, 8, 16 ] }
+            }
+        }
+    ]
+}

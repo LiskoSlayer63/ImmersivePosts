@@ -1,0 +1,12 @@
+{
+	"variants": {
+		"normal": { "model": "immersivepoles:extendablepost/postbase" },
+		"mat=woodpole,meta=meta0,type=woodpole": { "model": "immersivepoles:extendablepost/post" },
+		"mat=woodpole,meta=meta1,type=woodpole": { "model": "immersivepoles:extendablepost/post" },
+		"mat=woodpole,meta=meta2,type=woodpole": { "model": "immersivepoles:extendablepost/arm" },
+		"mat=woodpole,meta=meta3,type=aluminiumpole": { "model": "immersivepoles:extendablepost/post" },
+		"mat=woodpole,meta=meta4,type=aluminiumpole": { "model": "immersivepoles:extendablepost/arm" },
+		"mat=woodpole,meta=meta5,type=steelpole": { "model": "immersivepoles:extendablepost/post" },
+		"mat=woodpole,meta=meta6,type=steelpole": { "model": "immersivepoles:extendablepost/arm" }
+	}
+}

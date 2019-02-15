@@ -1,0 +1,12 @@
+[{
+"modid": "immersivepoles",
+"name": "Immersive Poles",
+"description": "A mod to surpass Metal Gear.",
+"version": "${version}",
+"mcversion": "${mcversion}",
+"url": "https://github.com/TwistedGate/ImmersivePoles",
+"updateUrl": "",
+"authorList": ["TwistedGate"],
+"logoFile": "",
+"screenshots": [],
+}]

@@ -1,0 +1,20 @@
+#########################
+#        Blocks         #
+#########################
+
+tile.immersivepoles.extendedpost.name=dev0
+tile.immersivepoles.extendablepost.name=Extendable Post
+tile.immersivepoles.postbase.name=Extendable Post
+tile.immersivepoles.woodpole.name=Wooden Post
+tile.immersivepoles.aluminiumpole.name=Aluminium Post
+tile.immersivepoles.steelpole.name=Steel Post
+
+#########################
+#         Items         #
+#########################
+
+#########################
+#     Creative Tabs     #
+#########################
+
+itemGroup.immersivepoles=Immersive Poles
