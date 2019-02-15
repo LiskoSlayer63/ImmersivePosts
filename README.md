@@ -1,3 +1,6 @@
+# WORK IN PROGRESS
+Im not done!
+
 # ImmersivePoles
 
 Aims to just give the ability to extend the post to whatever height you want.
