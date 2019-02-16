@@ -18,7 +18,11 @@ public class IPBlock extends Block{
 		setCreativeTab(ImmersivePoles.ipCreativeTab);
 		
 		IPStuff.BLOCKS.add(this);
-		IPStuff.ITEMS.add(toItemBlock(res));
+	}
+	
+	/** Doesnt actualy register the item, just adds it to the list for registration */
+	public final void registerBlockItem(){
+		IPStuff.ITEMS.add(toItemBlock(this.getRegistryName()));
 	}
 	
 	
