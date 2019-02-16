@@ -1,7 +1,7 @@
 [{
 "modid": "immersivepoles",
 "name": "Immersive Poles",
-"description": "A mod to surpass Metal Gear.",
+"description": "Adds the ability to extend the wood, aluminium and steel poles.",
 "version": "${version}",
 "mcversion": "${mcversion}",
 "url": "https://github.com/TwistedGate/ImmersivePoles",
