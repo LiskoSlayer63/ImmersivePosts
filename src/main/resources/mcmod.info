@@ -1,12 +1,12 @@
 [{
-"modid": "immersivepoles",
-"name": "Immersive Poles",
-"description": "Adds the ability to extend the wood, aluminium and steel poles.",
-"version": "${version}",
-"mcversion": "${mcversion}",
-"url": "https://github.com/TwistedGate/ImmersivePoles",
-"updateUrl": "",
-"authorList": ["TwistedGate"],
-"logoFile": "",
-"screenshots": [],
+	"modid": "immersivepoles",
+	"name": "Immersive Poles",
+	"description": "Adds the ability to extend the wood, aluminium and steel poles.",
+	"version": "${version}",
+	"mcversion": "${mcversion}",
+	"url": "https://github.com/TwistedGate/ImmersivePoles",
+	"updateUrl": "",
+	"authorList": ["TwistedGate"],
+	"logoFile": "",
+	"screenshots": []
 }]
