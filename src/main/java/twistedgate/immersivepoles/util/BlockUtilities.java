@@ -7,6 +7,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
+/**
+ * Just a few little convenience methods
+ * @author TwistedGate
+ */
 public class BlockUtilities{
 	public static Block getBlockFrom(World world, BlockPos pos){
 		return getBlockFromDirection((IBlockAccess)world, pos, null);

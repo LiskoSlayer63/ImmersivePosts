@@ -5,23 +5,19 @@ import org.apache.logging.log4j.Logger;
 import blusunrize.immersiveengineering.common.IEContent;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import twistedgate.immersivepoles.common.CommonProxy;
 import twistedgate.immersivepoles.common.blocks.IPStuff;
-import twistedgate.immersivepoles.tiles.TEExtendedPost;
 
 @Mod(
 	modid=ModInfo.ID,
 	name=ModInfo.NAME,
-	version=ModInfo.VERSION,
+//	version=ModInfo.VERSION, // Disabled because replacing stuff aint working
 	dependencies=ModInfo.DEPENDING,
 	certificateFingerprint=ModInfo.CERT_PRINT
 )
@@ -40,6 +36,8 @@ public class ImmersivePoles{
 		public ItemStack getTabIconItem(){
 			if(this.displayItem==null)
 				displayItem=new ItemStack(IEContent.blockWoodenDevice1,1,3);
+				// Only temporarely using IE's wooden pole
+				// Until i figure out the item deal with the PoleBase item
 			
 			return this.displayItem;
 		}
@@ -51,6 +49,10 @@ public class ImmersivePoles{
 		
 		IPStuff.init();
 		
+		/*
+		 * Maybe i'll use OBJs at some point
+		 * since JSON isnt being much of a help thing
+		 */
 		//OBJLoader.INSTANCE.addDomain(ModInfo.ID);
 		
 		proxy.preInit(event);
@@ -60,22 +62,10 @@ public class ImmersivePoles{
 	@EventHandler
 	public void init(FMLInitializationEvent event){
 		proxy.init(event);
-		
-		regTile(TEExtendedPost.class);
 	}
 	
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent event){
 		proxy.postInit(event);
-	}
-	
-	private static void regTile(Class<? extends TileEntity> tile){
-		String name=tile.getSimpleName();
-		name=name.substring(2);
-		
-		ResourceLocation loc=new ResourceLocation(ModInfo.ID, name);
-		GameRegistry.registerTileEntity(tile, loc);
-		
-		log.debug("Registered TileEntity: "+loc);
 	}
 }

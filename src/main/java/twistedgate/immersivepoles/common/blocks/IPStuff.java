@@ -21,8 +21,7 @@ public class IPStuff{
 	public static final ArrayList<Block> BLOCKS=new ArrayList<>();
 	public static final ArrayList<Item> ITEMS=new ArrayList<>();
 	
-	public static IPBlock extendablePost; // Old, a try to port the orignal 1:1
-	
+	// Could make these final too.. Hmmmmm
 	public static BlockPoleBase poleBase;
 	public static BlockPole woodPole;
 	public static BlockPole aluPole;
@@ -38,7 +37,6 @@ public class IPStuff{
 		steelPole=(BlockPole) new BlockPole(Material.IRON, EnumPoleMaterial.STEEL);
 		
 		poleBase.registerBlockItem();
-//		extendablePost=new BlockExtendablePost();
 	}
 	
 	@SubscribeEvent

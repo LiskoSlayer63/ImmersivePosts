@@ -9,6 +9,10 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IStringSerializable;
 
+/**
+ * Who knows, maybe i'll trying add custom ones too, like gold or iron
+ * @author TwistedGate
+ */
 public enum EnumPoleMaterial implements IStringSerializable{
 	WOOD("woodpole", IEContent.blockWoodenDecoration, BlockTypes_WoodenDecoration.FENCE.getMeta()),
 	ALU("aluminiumpole", IEContent.blockMetalDecoration1, BlockTypes_MetalDecoration1.ALUMINUM_FENCE.getMeta()),
@@ -45,6 +49,7 @@ public enum EnumPoleMaterial implements IStringSerializable{
 		return this.name;
 	}
 	
+	// Below are mostly just convenience methods
 	
 	public static Block getFenceBlock(ItemStack stack){
 		if(stack==null || stack.isEmpty()) return null;
