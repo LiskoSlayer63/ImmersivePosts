@@ -1,6 +1,3 @@
-# Made a mistake with the name of the mod, currently changing to "ImmersivePosts"
-"Poles" isnt the right word.
-
 # ImmersivePosts
 Goal is to just give the ability to extend the posts to whatever height you want.
 
