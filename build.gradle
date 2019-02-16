@@ -47,8 +47,16 @@ task signJar(type: SignJar, dependsOn: reobfJar) {
 	onlyIf {
 		project.hasProperty('keyStore')
 	}
-	inputFile = jar.archivePath
-	outputFile = jar.archivePath
+	
+	if (project.hasProperty('keyStore')) {
+		alias = project.storeAlias
+		storePass = project.storePass
+		keyPass = project.storePass
+		keyStore = project.keyStore
+		
+		inputFile = jar.archivePath
+		outputFile = jar.archivePath
+	}
 }
 
 build.dependsOn signJar
