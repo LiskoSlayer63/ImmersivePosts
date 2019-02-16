@@ -1,5 +1,6 @@
 package twistedgate.immersivepoles.common.blocks;
 
+import blusunrize.immersiveengineering.api.IPostBlock;
 import blusunrize.immersiveengineering.common.util.Utils;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -25,7 +26,7 @@ import net.minecraft.world.World;
 import twistedgate.immersivepoles.util.BlockUtilities;
 
 // Using IPBlock temporarly for debugging purposes!
-public class BlockPole extends IPBlock{
+public class BlockPole extends IPBlock implements IPostBlock{
 	public static final PropertyDirection DIRECTION=PropertyDirection.create("facing");
 	public static final PropertyBool FLIP=PropertyBool.create("flip");
 	public static final PropertyEnum<EnumPoleType> TYPE=PropertyEnum.create("type", EnumPoleType.class);
@@ -152,6 +153,12 @@ public class BlockPole extends IPBlock{
 	public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player){
 		return this.poleMaterial.getFenceItem();
 	}
+
+	@Override
+	public boolean canConnectTransformer(IBlockAccess world, BlockPos pos){
+		IBlockState state=world.getBlockState(pos);
+		return state.getValue(TYPE)!=EnumPoleType.ARM;
+	}
 	
 	
 	@Override
@@ -165,8 +172,8 @@ public class BlockPole extends IPBlock{
 					return true;
 				}
 				
-				for(int i=1;i<(worldIn.getActualHeight()-pos.getY());i++){
-					BlockPos nPos=pos.add(0,i,0);
+				for(int y=1;y<(worldIn.getActualHeight()-pos.getY());y++){
+					BlockPos nPos=pos.add(0,y,0);
 					
 					if(worldIn.isAirBlock(nPos)){
 						IBlockState fb=null;
@@ -203,7 +210,8 @@ public class BlockPole extends IPBlock{
 								}else{
 									IBlockState stat=worldIn.getBlockState(nPos);
 									if(stat.getBlock() instanceof BlockPole){
-										worldIn.setBlockToAir(nPos);
+										if(state.getValue(TYPE)==EnumPoleType.ARM && ((BlockPole)stat.getBlock()).poleMaterial==this.poleMaterial)
+											worldIn.setBlockToAir(nPos);
 									}
 								}
 								
@@ -253,45 +261,25 @@ public class BlockPole extends IPBlock{
 		}
 	}
 	
-	static final AxisAlignedBB POST_SHAPE=new AxisAlignedBB(0.375F, 0.0F, 0.375F, 0.625F, 1.0F, 0.625F);
-	static final AxisAlignedBB POST_TOP_SHAPE=new AxisAlignedBB(0.3125F, 0.0F, 0.3125F, 0.6875F, 1.0F, 0.6875F);
+	static final AxisAlignedBB POST_SHAPE=new AxisAlignedBB(0.3125F, 0.0F, 0.3125F, 0.6875F, 1.0F, 0.6875F);
 	
 	AxisAlignedBB stateBounds(IBlockAccess world, BlockPos pos, IBlockState state){
 		switch(state.getValue(TYPE)){
-			case POST:
-				return POST_SHAPE;
-			case POST_TOP:
-				return POST_TOP_SHAPE;
 			case ARM:{
-				boolean flipped=state.getValue(FLIP);
 				EnumFacing facing=state.getValue(DIRECTION);
+				boolean flipped=state.getValue(FLIP);
 				
 				float minY=flipped?0.0F:0.34375F;
 				float maxY=flipped?0.65625F:1.0F;
 				
-				float minX;
-				float maxX;
-				if(flipped){
-					minX=facing==EnumFacing.WEST?-0.25F:0.3125F;
-					maxX=facing==EnumFacing.EAST? 1.25F:0.6875F;
-				}else{
-					minX=facing==EnumFacing.EAST?-0.25F:0.3125F;
-					maxX=facing==EnumFacing.WEST? 1.25F:0.6875F;
-				}
-				
-				float minZ;
-				float maxZ;
-				if(flipped){
-					minZ=facing==EnumFacing.NORTH?-0.25F:0.3125F;
-					maxZ=facing==EnumFacing.SOUTH? 1.25F:0.6875F;
-				}else{
-					minZ=facing==EnumFacing.SOUTH?-0.25F:0.3125F;
-					maxZ=facing==EnumFacing.NORTH? 1.25F:0.6875F;
-				}
+				float minX=facing==EnumFacing.EAST?-0.25F:0.3125F;
+				float maxX=facing==EnumFacing.WEST? 1.25F:0.6875F;
+				float minZ=facing==EnumFacing.SOUTH?-0.25F:0.3125F;
+				float maxZ=facing==EnumFacing.NORTH? 1.25F:0.6875F;
 				
 				return new AxisAlignedBB(minX, minY, minZ, maxX, maxY, maxZ);
 			}
+			default: return POST_SHAPE;
 		}
-		return new AxisAlignedBB(pos);
 	}
 }
