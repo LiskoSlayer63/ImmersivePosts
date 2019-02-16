@@ -49,7 +49,7 @@ task signJar(type: SignJar, dependsOn: reobfJar) {
 	}
 	
 	if (project.hasProperty('keyStore')) {
-		alias = project.storeAlias
+		alias = project.alias
 		storePass = project.storePass
 		keyPass = project.storePass
 		keyStore = project.keyStore
