@@ -1,8 +1,0 @@
-{
-	"forge_marker": 1,
-	"defaults": {},
-	"variants": {
-		"inventory": { "model":"immersivepoles:extendablepost/polebase" },
-		"normal": { "model":"immersivepoles:extendablepost/polebase" }
-	}
-}

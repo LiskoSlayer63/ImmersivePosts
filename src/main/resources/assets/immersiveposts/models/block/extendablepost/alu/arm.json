@@ -1,0 +1,7 @@
+{
+    "parent":"immersiveposts:block/extendablepost/wood/arm",
+    "textures": {
+        "postarm": "immersiveposts:blocks/metal_decoration2_aluminum_post",
+        "particle": "immersiveposts:blocks/metal_decoration2_aluminum_post"
+    }
+}

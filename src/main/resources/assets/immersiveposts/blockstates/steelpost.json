@@ -1,0 +1,24 @@
+{
+	"forge_marker": 1,
+	"defaults": {},
+	"variants": {
+		"inventory": { "model":"immersiveposts:extendablepost/steel/post" },
+		"facing":{
+			"up":{},
+			"down":{},
+			"north":{},
+			"east":{ "y":90 },
+			"south":{ "y":180 },
+			"west":{ "y":270 }
+		},
+		"flip":{
+			"true":{ "x":180 },
+			"false":{}
+		},
+		"type":{
+			"arm":{ "model":"immersiveposts:extendablepost/steel/arm" },
+			"post":{ "model":"immersiveposts:extendablepost/steel/post" },
+			"top":{ "model":"immersiveposts:extendablepost/steel/post_cap" }
+		}
+	}
+}

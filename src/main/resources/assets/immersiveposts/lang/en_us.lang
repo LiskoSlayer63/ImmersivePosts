@@ -1,0 +1,18 @@
+#########################
+#        Blocks         #
+#########################
+
+tile.immersiveposts.postbase.name=Extendable Post
+tile.immersiveposts.woodpost.name=Wooden Post
+tile.immersiveposts.aluminiumpost.name=Aluminium Post
+tile.immersiveposts.steelpost.name=Steel Post
+
+#########################
+#         Items         #
+#########################
+
+#########################
+#     Creative Tabs     #
+#########################
+
+itemGroup.immersiveposts=Immersive Poles
