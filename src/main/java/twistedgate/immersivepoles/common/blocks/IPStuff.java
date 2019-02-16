@@ -37,6 +37,7 @@ public class IPStuff{
 		aluPole=(BlockPole) new BlockPole(Material.IRON, EnumPoleMaterial.ALU);
 		steelPole=(BlockPole) new BlockPole(Material.IRON, EnumPoleMaterial.STEEL);
 		
+		poleBase.registerBlockItem();
 //		extendablePost=new BlockExtendablePost();
 	}
 	
