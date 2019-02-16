@@ -51,11 +51,6 @@ public class BlockPoleBase extends IPBlock{
 	
 	
 	@Override
-	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos){
-		
-	}
-	
-	@Override
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ){
 		if(!worldIn.isRemote){
 			ItemStack held=playerIn.getHeldItemMainhand();
