@@ -1,3 +1,3 @@
 # TO-DO List
 - Get item for the PoleBase to show itself to the world.
-- The actual functionality.
+- Recipe once i deem this mod fit for survival
