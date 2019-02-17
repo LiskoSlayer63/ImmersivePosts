@@ -243,12 +243,14 @@ public class BlockPost extends IPBlock implements IPostBlock{
 			}
 		}
 		
-		Block aboveBlock=BlockUtilities.getBlockFromDirection(worldIn, pos, EnumFacing.UP);
+		IBlockState aboveState=worldIn.getBlockState(pos.offset(EnumFacing.UP));
+		Block aboveBlock=aboveState.getBlock();
 		if(thisType==EnumPostType.POST && aboveBlock!=this){
 			worldIn.setBlockState(pos, state.withProperty(TYPE, EnumPostType.POST_TOP));
 			
 		}else if(thisType==EnumPostType.POST_TOP && aboveBlock==this){
-			worldIn.setBlockState(pos, state.withProperty(TYPE, EnumPostType.POST));
+			if(aboveState.getValue(TYPE)!=EnumPostType.ARM)
+				worldIn.setBlockState(pos, state.withProperty(TYPE, EnumPostType.POST));
 			
 		}else if(thisType==EnumPostType.ARM){
 			EnumFacing f=state.getValue(DIRECTION).getOpposite();
@@ -257,11 +259,15 @@ public class BlockPost extends IPBlock implements IPostBlock{
 				return;
 			}
 			
-			Block b=BlockUtilities.getBlockFromDirection(worldIn, pos, EnumFacing.DOWN);
-			if(b!=this && b!=Blocks.AIR)
-				worldIn.setBlockState(pos, state.withProperty(FLIP, true), 3);
-			else
-				worldIn.setBlockState(pos, state.withProperty(FLIP, false), 3);
+			Block b=BlockUtilities.getBlockFromDirection(worldIn, pos, EnumFacing.UP);
+			if(b==Blocks.AIR){
+				Block b1=BlockUtilities.getBlockFromDirection(worldIn, pos, EnumFacing.DOWN);
+				if(b1!=this && b1!=Blocks.AIR){
+					worldIn.setBlockState(pos, state.withProperty(FLIP, true), 3);
+				}else{
+					worldIn.setBlockState(pos, state.withProperty(FLIP, false), 3);
+				}
+			}
 		}
 	}
 	
