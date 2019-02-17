@@ -1,5 +1,5 @@
 # ImmersivePosts
-Goal is to just give the ability to extend the posts to whatever height you want.
+Download from ![SourceForge](https://minecraft.curseforge.com/projects/immersiveposts)
 
 ### WORK IN PROGRESS
 This mod is not fully done yet and still a work-in-progress, and things are possible to change drasticaly as things progress.
