@@ -25,7 +25,6 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import twistedgate.immersiveposts.util.BlockUtilities;
 
-// Using IPBlock temporarly for debugging purposes!
 public class BlockPost extends IPBlock implements IPostBlock{
 	public static final PropertyDirection DIRECTION=PropertyDirection.create("facing");
 	public static final PropertyBool FLIP=PropertyBool.create("flip");

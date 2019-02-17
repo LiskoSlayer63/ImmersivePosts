@@ -19,7 +19,8 @@ import twistedgate.immersiveposts.common.blocks.IPStuff;
 	name=ModInfo.NAME,
 //	version=ModInfo.VERSION, // Disabled because replacing stuff aint working
 	dependencies=ModInfo.DEPENDING,
-	certificateFingerprint=ModInfo.CERT_PRINT
+	certificateFingerprint=ModInfo.CERT_PRINT,
+	updateJSON=ModInfo.UPDATE_URL
 )
 public class ImmersivePost{
 	@Mod.Instance(ModInfo.ID)
@@ -37,7 +38,7 @@ public class ImmersivePost{
 			if(this.displayItem==null)
 				displayItem=new ItemStack(IEContent.blockWoodenDevice1,1,3);
 				// Only temporarely using IE's wooden post
-				// Until i figure out the item deal with the PoleBase item
+				// Until i figure out the deal with the Extendable Post item
 			
 			return this.displayItem;
 		}
