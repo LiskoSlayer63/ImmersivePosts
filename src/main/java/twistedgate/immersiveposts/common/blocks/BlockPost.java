@@ -257,7 +257,11 @@ public class BlockPost extends IPBlock implements IPostBlock{
 				return;
 			}
 			
-			worldIn.setBlockState(pos, state.withProperty(FLIP, BlockUtilities.getBlockFromDirection(worldIn, pos, EnumFacing.DOWN)!=Blocks.AIR), 3);
+			Block b=BlockUtilities.getBlockFromDirection(worldIn, pos, EnumFacing.DOWN);
+			if(b!=this && b!=Blocks.AIR)
+				worldIn.setBlockState(pos, state.withProperty(FLIP, true), 3);
+			else
+				worldIn.setBlockState(pos, state.withProperty(FLIP, false), 3);
 		}
 	}
 	
