@@ -2,23 +2,48 @@
 	"forge_marker": 1,
 	"defaults": {},
 	"variants": {
-		"inventory": { "model":"immersiveposts:extendablepost/alu/post" },
-		"facing":{
-			"up":{},
-			"down":{},
-			"north":{},
-			"east":{ "y":90 },
-			"south":{ "y":180 },
-			"west":{ "y":270 }
-		},
-		"flip":{
-			"true":{ "x":180 },
-			"false":{}
-		},
-		"type":{
-			"arm":{ "model":"immersiveposts:extendablepost/alu/arm" },
-			"post":{ "model":"immersiveposts:extendablepost/alu/post" },
-			"top":{ "model":"immersiveposts:extendablepost/alu/post_cap" }
-		}
+		"inventory": [{}],
+		
+		"facing=up,flip=false,type=post": { "model":"immersiveposts:extendablepost/alu/post" },
+		"facing=down,flip=false,type=post": { "model":"immersiveposts:extendablepost/alu/post" },
+		"facing=north,flip=false,type=post": { "model":"immersiveposts:extendablepost/alu/post" },
+		"facing=east,flip=false,type=post": { "model":"immersiveposts:extendablepost/alu/post" },
+		"facing=south,flip=false,type=post": { "model":"immersiveposts:extendablepost/alu/post" },
+		"facing=west,flip=false,type=post": { "model":"immersiveposts:extendablepost/alu/post" },
+		
+		"facing=up,flip=false,type=top": { "model":"immersiveposts:extendablepost/alu/post_cap" },
+		"facing=down,flip=false,type=top": { "model":"immersiveposts:extendablepost/alu/post_cap" },
+		"facing=north,flip=false,type=top": { "model":"immersiveposts:extendablepost/alu/post_cap" },
+		"facing=east,flip=false,type=top": { "model":"immersiveposts:extendablepost/alu/post_cap" },
+		"facing=south,flip=false,type=top": { "model":"immersiveposts:extendablepost/alu/post_cap" },
+		"facing=west,flip=false,type=top": { "model":"immersiveposts:extendablepost/alu/post_cap" },
+		
+		"facing=up,flip=false,type=arm": { "model":"immersiveposts:extendablepost/alu/arm" },
+		"facing=down,flip=false,type=arm": { "model":"immersiveposts:extendablepost/alu/arm" },
+		"facing=north,flip=false,type=arm": { "model":"immersiveposts:extendablepost/alu/arm" },
+		"facing=east,flip=false,type=arm": { "model":"immersiveposts:extendablepost/alu/arm", "y":90 },
+		"facing=south,flip=false,type=arm": { "model":"immersiveposts:extendablepost/alu/arm", "y":180 },
+		"facing=west,flip=false,type=arm": { "model":"immersiveposts:extendablepost/alu/arm", "y":270 },
+		
+		"facing=up,flip=true,type=post": { "model":"immersiveposts:extendablepost/alu/post" },
+		"facing=down,flip=true,type=post": { "model":"immersiveposts:extendablepost/alu/post" },
+		"facing=north,flip=true,type=post": { "model":"immersiveposts:extendablepost/alu/post" },
+		"facing=east,flip=true,type=post": { "model":"immersiveposts:extendablepost/alu/post" },
+		"facing=south,flip=true,type=post": { "model":"immersiveposts:extendablepost/alu/post" },
+		"facing=west,flip=true,type=post": { "model":"immersiveposts:extendablepost/alu/post" },
+		
+		"facing=up,flip=true,type=top": { "model":"immersiveposts:extendablepost/alu/post_cap" },
+		"facing=down,flip=true,type=top": { "model":"immersiveposts:extendablepost/alu/post_cap" },
+		"facing=north,flip=true,type=top": { "model":"immersiveposts:extendablepost/alu/post_cap" },
+		"facing=east,flip=true,type=top": { "model":"immersiveposts:extendablepost/alu/post_cap" },
+		"facing=south,flip=true,type=top": { "model":"immersiveposts:extendablepost/alu/post_cap" },
+		"facing=west,flip=true,type=top": { "model":"immersiveposts:extendablepost/alu/post_cap" },
+		
+		"facing=up,flip=true,type=arm": { "model":"immersiveposts:extendablepost/alu/arm", "x":180 },
+		"facing=down,flip=true,type=arm": { "model":"immersiveposts:extendablepost/alu/arm", "x":180 },
+		"facing=north,flip=true,type=arm": { "model":"immersiveposts:extendablepost/alu/arm", "x":180, "y":180 },
+		"facing=east,flip=true,type=arm": { "model":"immersiveposts:extendablepost/alu/arm", "x":180 , "y":270 },
+		"facing=south,flip=true,type=arm": { "model":"immersiveposts:extendablepost/alu/arm", "x":180 , "y":0 },
+		"facing=west,flip=true,type=arm": { "model":"immersiveposts:extendablepost/alu/arm", "x":180 , "y":90 }
 	}
 }
