@@ -165,9 +165,15 @@ public class BlockPost extends IPBlock implements IPostBlock{
 		if(!worldIn.isRemote){
 			ItemStack held=playerIn.getHeldItemMainhand();
 			if(EnumPostMaterial.isFenceItem(held)){
-				
 				if(!held.isItemEqual(this.postMaterial.getFenceItem())){
 					playerIn.sendMessage(new TextComponentString("Expected: "+this.postMaterial.getFenceItem().getDisplayName()+"."));
+					return true;
+				}
+				
+				BlockPos up=pos.offset(EnumFacing.UP);
+				if((BlockUtilities.getBlockFrom(worldIn, up) instanceof BlockPost) &&
+						worldIn.getBlockState(up).getValue(TYPE)==EnumPostType.ARM &&
+						state.getValue(TYPE)==EnumPostType.ARM || state.getValue(FLIP)){
 					return true;
 				}
 				
@@ -175,6 +181,7 @@ public class BlockPost extends IPBlock implements IPostBlock{
 					BlockPos nPos=pos.add(0,y,0);
 					
 					if(worldIn.isAirBlock(nPos)){
+						
 						IBlockState fb=null;
 						if(held.isItemEqual(EnumPostMaterial.WOOD.getFenceItem()))
 							fb=IPStuff.woodPost.getDefaultState().withProperty(BlockPost.TYPE, EnumPostType.POST_TOP);
