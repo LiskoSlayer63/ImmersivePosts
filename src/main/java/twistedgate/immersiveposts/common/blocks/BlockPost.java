@@ -170,15 +170,23 @@ public class BlockPost extends IPBlock implements IPostBlock{
 					return true;
 				}
 				
-				BlockPos up=pos.offset(EnumFacing.UP);
-				if((BlockUtilities.getBlockFrom(worldIn, up) instanceof BlockPost) &&
-						worldIn.getBlockState(up).getValue(TYPE)==EnumPostType.ARM &&
-						state.getValue(TYPE)==EnumPostType.ARM || state.getValue(FLIP)){
-					return true;
-				}
-				
-				for(int y=1;y<(worldIn.getActualHeight()-pos.getY());y++){
+				for(int y=0;y<(worldIn.getActualHeight()-pos.getY());y++){
 					BlockPos nPos=pos.add(0,y,0);
+					
+					if((BlockUtilities.getBlockFrom(worldIn, nPos) instanceof BlockPost)){
+						IBlockState s=worldIn.getBlockState(nPos);
+						if(s.getValue(BlockPost.TYPE)==EnumPostType.ARM && s.getValue(BlockPost.FLIP)){
+							return true;
+						}
+						
+						BlockPos up=nPos.offset(EnumFacing.UP);
+						if((BlockUtilities.getBlockFrom(worldIn, up) instanceof BlockPost)){
+							s=worldIn.getBlockState(up);
+							if(s.getValue(BlockPost.TYPE)==EnumPostType.ARM){
+								return true;
+							}
+						}
+					}
 					
 					if(worldIn.isAirBlock(nPos)){
 						

@@ -13,6 +13,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import twistedgate.immersiveposts.util.BlockUtilities;
 
 public class BlockPostBase extends IPBlock{
 	
@@ -79,6 +80,13 @@ public class BlockPostBase extends IPBlock{
 				
 				for(int i=1;i<(worldIn.getActualHeight()-pos.getY());i++){
 					BlockPos nPos=pos.add(0, i, 0);
+					
+					if((BlockUtilities.getBlockFrom(worldIn, nPos) instanceof BlockPost)){
+						IBlockState s=worldIn.getBlockState(nPos);
+						if(s.getValue(BlockPost.TYPE)==EnumPostType.ARM){
+							return true;
+						}
+					}
 					
 					if(worldIn.isAirBlock(nPos)){
 						IBlockState fb=null;
