@@ -1,6 +1,7 @@
 # ImmersivePosts
 Download from ![SourceForge](https://minecraft.curseforge.com/projects/immersiveposts)
 
+### Extendable Post Recipe
 ![Recipe](/imgs/base_recipe.png)
 
 ### WORK IN PROGRESS
