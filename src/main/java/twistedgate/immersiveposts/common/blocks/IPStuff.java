@@ -39,18 +39,18 @@ public class IPStuff{
 	
 	@SubscribeEvent
 	public static void registerBlocks(RegistryEvent.Register<Block> event){
-		ImmersivePost.log.info("=== Registering Blocks ===");
+		ImmersivePost.log.debug("=== Registering Blocks ===");
 		for(Block block:BLOCKS){
-			ImmersivePost.log.info("Registering Block: "+block.getRegistryName());
+			ImmersivePost.log.debug("Registering Block: "+block.getRegistryName());
 			event.getRegistry().register(block);
 		}
 	}
 	
 	@SubscribeEvent
 	public static void registerItems(RegistryEvent.Register<Item> event){
-		ImmersivePost.log.info("=== Registering Items ===");
+		ImmersivePost.log.debug("=== Registering Items ===");
 		for(Item item:ITEMS){
-			ImmersivePost.log.info("Registering Item: "+item.getRegistryName());
+			ImmersivePost.log.debug("Registering Item: "+item.getRegistryName());
 			event.getRegistry().register(item);
 		}
 	}
