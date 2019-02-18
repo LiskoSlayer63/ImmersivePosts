@@ -11,12 +11,12 @@ public class ClientProxy extends CommonProxy{
 	@Override
 	public void preInit(FMLPreInitializationEvent event){
 		ImmersivePost.log.debug("ClientProxy: Pre-init.");
-		IPStuff.regModels();
 	}
 	
 	@Override
 	public void init(FMLInitializationEvent event){
 		ImmersivePost.log.debug("ClientProxy: Init.");
+		IPStuff.regModels();
 	}
 	
 	@Override

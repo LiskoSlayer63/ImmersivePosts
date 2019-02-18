@@ -18,7 +18,7 @@ import twistedgate.immersiveposts.ModInfo;
 @Mod.EventBusSubscriber(modid=ModInfo.ID)
 public class IPStuff{
 	
-	public static final ArrayList<Block> BLOCKS=new ArrayList<>();
+	public static final ArrayList<IPBlock> BLOCKS=new ArrayList<>();
 	public static final ArrayList<Item> ITEMS=new ArrayList<>();
 	
 	// Could make these final too.. Hmmmmm
@@ -30,29 +30,27 @@ public class IPStuff{
 	public static void init(){
 		ImmersivePost.log.debug("=== Init ===");
 		
-		postBase=new BlockPostBase();
+		postBase=(BlockPostBase)new BlockPostBase().registerBlockItem();
 		
-		woodPost=(BlockPost) new BlockPost(Material.WOOD, EnumPostMaterial.WOOD);
-		aluPost=(BlockPost) new BlockPost(Material.IRON, EnumPostMaterial.ALU);
-		steelPost=(BlockPost) new BlockPost(Material.IRON, EnumPostMaterial.STEEL);
-		
-		postBase.registerBlockItem();
+		woodPost=new BlockPost(Material.WOOD, EnumPostMaterial.WOOD);
+		aluPost=new BlockPost(Material.IRON, EnumPostMaterial.ALU);
+		steelPost=new BlockPost(Material.IRON, EnumPostMaterial.STEEL);
 	}
 	
 	@SubscribeEvent
 	public static void registerBlocks(RegistryEvent.Register<Block> event){
-		ImmersivePost.log.debug("=== Registering Blocks ===");
+		ImmersivePost.log.info("=== Registering Blocks ===");
 		for(Block block:BLOCKS){
-			ImmersivePost.log.debug("Registering Block: "+block.getRegistryName());
+			ImmersivePost.log.info("Registering Block: "+block.getRegistryName());
 			event.getRegistry().register(block);
 		}
 	}
 	
 	@SubscribeEvent
 	public static void registerItems(RegistryEvent.Register<Item> event){
-		ImmersivePost.log.debug("=== Registering Items ===");
+		ImmersivePost.log.info("=== Registering Items ===");
 		for(Item item:ITEMS){
-			ImmersivePost.log.debug("Registering Item: "+item.getRegistryName());
+			ImmersivePost.log.info("Registering Item: "+item.getRegistryName());
 			event.getRegistry().register(item);
 		}
 	}
@@ -60,8 +58,14 @@ public class IPStuff{
 	@SideOnly(Side.CLIENT)
 	public static void regModels(){
 		ImmersivePost.log.debug("=== Registering Models ===");
-		for(Block block:BLOCKS)
-			for(int i=0;i<16;i++)
-				ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), i, new ModelResourceLocation(block.getRegistryName(), "inventory"));
+		for(IPBlock block:BLOCKS){
+			if(block.hasItem()){
+				Item item=Item.getItemFromBlock(block);
+				ModelResourceLocation loc=new ModelResourceLocation(block.getRegistryName(), "inventory");
+				ModelLoader.setCustomModelResourceLocation(item, 0, loc);
+				
+				ImmersivePost.log.debug(item+" 0 "+loc);
+			}
+		}
 	}
 }
