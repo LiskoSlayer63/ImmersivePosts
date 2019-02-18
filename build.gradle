@@ -11,7 +11,7 @@ apply plugin: 'net.minecraftforge.gradle.forge'
 //Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 
 
-version = "0.0.1.001"
+version = "0.0.2"
 group= "twistedgate.immersiveposts"
 archivesBaseName = "ImmersivePosts"
 
@@ -25,6 +25,7 @@ minecraft {
 	runDir = "eclipse"
 	mappings = "snapshot_20180115"
 	
+	// Doesnt work i assume? Gonna leave it here for now tho
 	replaceIn "src/main/java/twistedgate/immersiveposts/ModInfo.java"
 	replace "@VERSION@", project.version
 }
