@@ -2,7 +2,7 @@
 	"forge_marker": 1,
 	"defaults": {},
 	"variants": {
-		"inventory": [{}],
+		"inventory": { "model":"immersiveposts:extendablepost/steel/post" },
 		
 		"facing=up,flip=false,type=post": { "model":"immersiveposts:extendablepost/steel/post" },
 		"facing=down,flip=false,type=post": { "model":"immersiveposts:extendablepost/steel/post" },

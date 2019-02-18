@@ -2,7 +2,7 @@
 	"forge_marker": 1,
 	"defaults": {},
 	"variants": {
-		"inventory": [{}],
+		"inventory": { "model":"immersiveposts:extendablepost/alu/post" },
 		
 		"facing=up,flip=false,type=post": { "model":"immersiveposts:extendablepost/alu/post" },
 		"facing=down,flip=false,type=post": { "model":"immersiveposts:extendablepost/alu/post" },
