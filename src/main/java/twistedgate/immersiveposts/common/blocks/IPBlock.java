@@ -8,7 +8,6 @@ import twistedgate.immersiveposts.ImmersivePosts;
 import twistedgate.immersiveposts.ModInfo;
 
 public class IPBlock extends Block{
-	
 	private boolean hasItem=false;
 	public IPBlock(Material material, String name){
 		super(material);

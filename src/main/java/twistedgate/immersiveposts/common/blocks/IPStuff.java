@@ -17,7 +17,6 @@ import twistedgate.immersiveposts.ModInfo;
 
 @Mod.EventBusSubscriber(modid=ModInfo.ID)
 public class IPStuff{
-	
 	public static final ArrayList<IPBlock> BLOCKS=new ArrayList<>();
 	public static final ArrayList<Item> ITEMS=new ArrayList<>();
 	

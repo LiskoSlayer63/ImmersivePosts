@@ -25,6 +25,10 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import twistedgate.immersiveposts.util.BlockUtilities;
 
+/**
+ * All-in-one package. Containing everything into one neat class is the best.
+ * @author TwistedGate
+ */
 public class BlockPost extends IPBlock implements IPostBlock{
 	public static final PropertyDirection DIRECTION=PropertyDirection.create("facing");
 	public static final PropertyBool FLIP=PropertyBool.create("flip");
@@ -156,7 +160,7 @@ public class BlockPost extends IPBlock implements IPostBlock{
 	@Override
 	public boolean canConnectTransformer(IBlockAccess world, BlockPos pos){
 		IBlockState state=world.getBlockState(pos);
-		return state.getValue(TYPE)!=EnumPostType.ARM;
+		return state.getValue(TYPE)==EnumPostType.POST;
 	}
 	
 	

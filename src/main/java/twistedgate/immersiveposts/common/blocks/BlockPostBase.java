@@ -15,7 +15,6 @@ import net.minecraft.world.World;
 import twistedgate.immersiveposts.util.BlockUtilities;
 
 public class BlockPostBase extends IPBlock{
-	
 	private static final AxisAlignedBB BASE_SIZE=new AxisAlignedBB(0.25F, 0.0F, 0.25F, 0.75F, 1.0F, 0.75F);
 	
 	public BlockPostBase(){
