@@ -27,7 +27,11 @@ public class BlockPostBase extends IPBlock{
 		setHardness(2.0F);
 		
 		IPStuff.ITEMS.add(new ItemPost(this));
-		this.hasItem=true;
+	}
+	
+	@Override
+	public boolean hasItem(){
+		return true;
 	}
 	
 	@Override

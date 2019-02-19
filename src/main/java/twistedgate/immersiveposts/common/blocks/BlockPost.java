@@ -83,14 +83,10 @@ public class BlockPost extends IPBlock implements IPostBlock{
 					case EAST:rot=1;break;
 					case SOUTH:rot=2;break;
 					case WEST:rot=3;break;
-					default:rot=0; // Aka North and Up or Down
+					default:rot=0; // Aka North, Up and Down
 				}
 				
-				if(state.getValue(FLIP)){
-					return 6+rot;
-				}else{
-					return 2+rot;
-				}
+				return (state.getValue(FLIP)?6:2)+rot;
 			}
 			default: return 0;
 		}
@@ -155,7 +151,7 @@ public class BlockPost extends IPBlock implements IPostBlock{
 	public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player){
 		return this.postMaterial.getFenceItem();
 	}
-
+	
 	@Override
 	public boolean canConnectTransformer(IBlockAccess world, BlockPos pos){
 		IBlockState state=world.getBlockState(pos);
@@ -281,7 +277,7 @@ public class BlockPost extends IPBlock implements IPostBlock{
 		}
 	}
 	
-	boolean canConnect(World world, BlockPos pos, EnumFacing facing){
+	static boolean canConnect(World world, BlockPos pos, EnumFacing facing){
 		BlockPos nPos=pos.offset(facing);
 		
 		if(world.isAirBlock(nPos) || BlockUtilities.getBlockFrom(world, nPos) instanceof IPostBlock)
@@ -299,7 +295,7 @@ public class BlockPost extends IPBlock implements IPostBlock{
 	
 	static final AxisAlignedBB POST_SHAPE=new AxisAlignedBB(0.3125F, 0.0F, 0.3125F, 0.6875F, 1.0F, 0.6875F);
 	
-	AxisAlignedBB stateBounds(IBlockAccess world, BlockPos pos, IBlockState state){
+	static AxisAlignedBB stateBounds(IBlockAccess world, BlockPos pos, IBlockState state){
 		switch(state.getValue(TYPE)){
 			case ARM:{
 				EnumFacing facing=state.getValue(DIRECTION);

@@ -7,7 +7,6 @@ import twistedgate.immersiveposts.ImmersivePosts;
 import twistedgate.immersiveposts.ModInfo;
 
 public class IPBlock extends Block{
-	protected boolean hasItem=false;
 	public IPBlock(Material material, String name){
 		super(material);
 		ResourceLocation res=new ResourceLocation(ModInfo.ID, name);
@@ -19,7 +18,7 @@ public class IPBlock extends Block{
 		IPStuff.BLOCKS.add(this);
 	}
 	
-	public final boolean hasItem(){
-		return this.hasItem;
+	public boolean hasItem(){
+		return false;
 	}
 }
