@@ -4,7 +4,6 @@ import blusunrize.immersiveengineering.api.IPostBlock;
 import blusunrize.immersiveengineering.common.util.Utils;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.properties.PropertyEnum;
@@ -22,6 +21,9 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.property.IExtendedBlockState;
+import net.minecraftforge.common.property.IUnlistedProperty;
+import net.minecraftforge.common.property.Properties;
 import twistedgate.immersiveposts.util.BlockUtilities;
 
 /**
@@ -29,6 +31,11 @@ import twistedgate.immersiveposts.util.BlockUtilities;
  * @author TwistedGate
  */
 public class BlockPost extends IPBlock implements IPostBlock{
+	public static final IUnlistedProperty<Boolean> PARM_NORTH=Properties.toUnlisted(PropertyBool.create("hasNorth"));
+	public static final IUnlistedProperty<Boolean> PARM_EAST=Properties.toUnlisted(PropertyBool.create("hasEast"));
+	public static final IUnlistedProperty<Boolean> PARM_SOUTH=Properties.toUnlisted(PropertyBool.create("hasSouth"));
+	public static final IUnlistedProperty<Boolean> PARM_WEST=Properties.toUnlisted(PropertyBool.create("hasWest"));
+	
 	public static final PropertyDirection DIRECTION=PropertyDirection.create("facing");
 	public static final PropertyBool FLIP=PropertyBool.create("flip");
 	public static final PropertyEnum<EnumPostType> TYPE=PropertyEnum.create("type", EnumPostType.class);
@@ -59,11 +66,10 @@ public class BlockPost extends IPBlock implements IPostBlock{
 	
 	@Override
 	protected BlockStateContainer createBlockState(){
-		return new BlockStateContainer(this, new IProperty<?>[]{
-			DIRECTION,
-			FLIP,
-			TYPE
-		});
+		return new BlockStateContainer.Builder(this)
+				.add(DIRECTION).add(FLIP).add(TYPE)
+				.add(PARM_NORTH).add(PARM_EAST).add(PARM_SOUTH).add(PARM_WEST)
+				.build();
 	}
 	
 	@Override
@@ -110,6 +116,15 @@ public class BlockPost extends IPBlock implements IPostBlock{
 			case 9: return state.withProperty(TYPE, EnumPostType.ARM).withProperty(FLIP, true).withProperty(DIRECTION, EnumFacing.WEST);
 			default: return state;
 		}
+	}
+	
+	@Override
+	public IBlockState getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos){
+		return ((IExtendedBlockState)state)
+				.withProperty(PARM_NORTH, canConnect(world, pos, EnumFacing.NORTH))
+				.withProperty(PARM_EAST, canConnect(world, pos, EnumFacing.EAST))
+				.withProperty(PARM_SOUTH, canConnect(world, pos, EnumFacing.SOUTH))
+				.withProperty(PARM_WEST, canConnect(world, pos, EnumFacing.WEST));
 	}
 	
 	@Override
@@ -277,19 +292,21 @@ public class BlockPost extends IPBlock implements IPostBlock{
 		}
 	}
 	
-	static boolean canConnect(World world, BlockPos pos, EnumFacing facing){
+	static boolean canConnect(IBlockAccess world, BlockPos pos, EnumFacing facing){
 		BlockPos nPos=pos.offset(facing);
 		
 		if(world.isAirBlock(nPos) || BlockUtilities.getBlockFrom(world, nPos) instanceof IPostBlock)
 			return false;
 		
 		IBlockState state=world.getBlockState(nPos);
-		if(facing==EnumFacing.DOWN){
-			return state.getBoundingBox(world, nPos).maxY>=1.0;
-		}else if(facing==EnumFacing.UP){
-			return state.getBoundingBox(world, nPos).minY<=0.0;
+		switch(facing){
+			case DOWN: return state.getBoundingBox(world, nPos).maxY>=1.0;
+			case UP: return state.getBoundingBox(world, nPos).minY<=0.0;
+			case SOUTH: return state.getBoundingBox(world, nPos).minZ>=1.0;
+			case NORTH: return state.getBoundingBox(world, nPos).minZ<=0.0;
+			case EAST: return state.getBoundingBox(world, nPos).maxX>=1.0;
+			case WEST: return state.getBoundingBox(world, nPos).maxX<=0.0;
 		}
-		
 		return false;
 	}
 	
