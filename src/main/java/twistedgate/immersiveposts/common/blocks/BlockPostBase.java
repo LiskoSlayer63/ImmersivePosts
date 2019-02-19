@@ -1,9 +1,13 @@
 package twistedgate.immersiveposts.common.blocks;
 
+import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -21,6 +25,9 @@ public class BlockPostBase extends IPBlock{
 		super(Material.ROCK, "postbase");
 		setResistance(3.0F);
 		setHardness(2.0F);
+		
+		IPStuff.ITEMS.add(new ItemPost(this));
+		this.hasItem=true;
 	}
 	
 	@Override
@@ -112,5 +119,21 @@ public class BlockPostBase extends IPBlock{
 		}
 		
 		return EnumPostMaterial.isFenceItem(playerIn.getHeldItemMainhand());
+	}
+	
+	
+	public static class ItemPost extends ItemBlock{
+		public ItemPost(Block block){
+			super(block);
+			setRegistryName(block.getRegistryName());
+		}
+		
+		@Override
+		public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn){
+			tooltip.add("§6Accepted Fences:");
+			for(EnumPostMaterial t:EnumPostMaterial.values()){
+				tooltip.add("- §a"+t.getFenceItem().getDisplayName());
+			}
+		}
 	}
 }

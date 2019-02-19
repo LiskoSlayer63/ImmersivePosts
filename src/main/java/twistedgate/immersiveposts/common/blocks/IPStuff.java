@@ -26,7 +26,7 @@ public class IPStuff{
 	public static final BlockPost steelPost;
 	
 	static{
-		postBase=(BlockPostBase)new BlockPostBase().registerBlockItem();
+		postBase=(BlockPostBase)new BlockPostBase();
 		
 		woodPost=new BlockPost(Material.WOOD, EnumPostMaterial.WOOD);
 		aluPost=new BlockPost(Material.IRON, EnumPostMaterial.ALU);
