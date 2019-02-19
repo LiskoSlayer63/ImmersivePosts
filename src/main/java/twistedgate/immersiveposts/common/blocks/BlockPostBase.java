@@ -1,6 +1,5 @@
 package twistedgate.immersiveposts.common.blocks;
 
-import blusunrize.immersiveengineering.common.util.Utils;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -113,6 +112,6 @@ public class BlockPostBase extends IPBlock{
 			}
 		}
 		
-		return Utils.isHammer(playerIn.getHeldItemMainhand()) || EnumPostMaterial.isFenceItem(playerIn.getHeldItemMainhand());
+		return EnumPostMaterial.isFenceItem(playerIn.getHeldItemMainhand());
 	}
 }

@@ -218,17 +218,9 @@ public class BlockPost extends IPBlock implements IPostBlock{
 						switch(facing){
 							case NORTH:case EAST:case SOUTH:case WEST:{
 								BlockPos nPos=pos.offset(facing);
-								
 								if(worldIn.isAirBlock(nPos)){
 									worldIn.setBlockState(nPos, defaultState.withProperty(DIRECTION, facing), 3);
-								}else{
-									IBlockState stat=worldIn.getBlockState(nPos);
-									if(stat.getBlock() instanceof BlockPost){
-										if(state.getValue(TYPE)==EnumPostType.ARM && ((BlockPost)stat.getBlock()).postMaterial==this.postMaterial)
-											worldIn.setBlockToAir(nPos);
-									}
 								}
-								
 								return true;
 							}
 							default:return true;
