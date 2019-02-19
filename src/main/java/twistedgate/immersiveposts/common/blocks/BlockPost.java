@@ -12,7 +12,6 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -224,11 +223,15 @@ public class BlockPost extends IPBlock implements IPostBlock{
 								BlockPos nPos=pos.offset(facing);
 								if(worldIn.isAirBlock(nPos)){
 									worldIn.setBlockState(nPos, defaultState.withProperty(DIRECTION, facing), 3);
+								}else if(BlockUtilities.getBlockFrom(worldIn, nPos)==this){
+									if(worldIn.getBlockState(nPos).getValue(TYPE)==EnumPostType.ARM){
+										worldIn.setBlockToAir(nPos);
+									}
 								}
-								return true;
 							}
-							default:return true;
+							default:break;
 						}
+						return true;
 					}
 					case ARM:{
 						worldIn.setBlockToAir(pos);
@@ -269,16 +272,29 @@ public class BlockPost extends IPBlock implements IPostBlock{
 				return;
 			}
 			
-			Block b=BlockUtilities.getBlockFromDirection(worldIn, pos, EnumFacing.UP);
-			if(b==Blocks.AIR){
-				Block b1=BlockUtilities.getBlockFromDirection(worldIn, pos, EnumFacing.DOWN);
-				if(b1!=this && b1!=Blocks.AIR){
-					worldIn.setBlockState(pos, state.withProperty(FLIP, true), 3);
-				}else{
-					worldIn.setBlockState(pos, state.withProperty(FLIP, false), 3);
-				}
+			if(canConnect(worldIn, pos, EnumFacing.UP)){
+				worldIn.setBlockState(pos, state.withProperty(FLIP, false), 3);
 			}
+			
+			boolean bool=canConnect(worldIn, pos, EnumFacing.DOWN);
+			worldIn.setBlockState(pos, state.withProperty(FLIP, bool), 3);
 		}
+	}
+	
+	boolean canConnect(World world, BlockPos pos, EnumFacing facing){
+		BlockPos nPos=pos.offset(facing);
+		
+		if(world.isAirBlock(nPos) || BlockUtilities.getBlockFrom(world, nPos) instanceof IPostBlock)
+			return false;
+		
+		IBlockState state=world.getBlockState(nPos);
+		if(facing==EnumFacing.DOWN){
+			return state.getBoundingBox(world, nPos).maxY>=1.0;
+		}else if(facing==EnumFacing.UP){
+			return state.getBoundingBox(world, nPos).minY<=0.0;
+		}
+		
+		return false;
 	}
 	
 	static final AxisAlignedBB POST_SHAPE=new AxisAlignedBB(0.3125F, 0.0F, 0.3125F, 0.6875F, 1.0F, 0.6875F);
