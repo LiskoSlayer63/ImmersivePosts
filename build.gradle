@@ -22,8 +22,8 @@ compileJava {
 
 minecraft {
 	version = "1.12.2-14.23.5.2768"
-	runDir = "eclipse"
-	mappings = "snapshot_20180115"
+	runDir = "run"
+	mappings = "stable_39"
 	
 	// Doesnt work i assume? Gonna leave it here for now tho
 	replaceIn "src/main/java/twistedgate/immersiveposts/ModInfo.java"
@@ -31,9 +31,10 @@ minecraft {
 }
 
 repositories {
-	maven {
-		url = "http://dvs1.progwml6.com/files/maven"
-	}
+    maven {
+        name 'jared maven'
+        url 'http://blamejared.com/maven'
+    }
 	maven {
 		name = "CurseForge"
 		url = "https://minecraft.curseforge.com/api/maven/"
@@ -41,7 +42,7 @@ repositories {
 }
 
 dependencies {
-	deobfCompile "immersive-engineering:ImmersiveEngineering:0.12:88"
+    deobfCompile "blusunrize:ImmersiveEngineering:0.12-+"
 }
 	
 task signJar(type: SignJar, dependsOn: reobfJar) {

@@ -25,7 +25,7 @@ public class ImmersivePosts{
 	public static final CreativeTabs ipCreativeTab=new CreativeTabs(ModInfo.ID){
 		ItemStack displayItem=null;
 		@Override
-		public ItemStack getTabIconItem(){
+		public ItemStack createIcon() {
 			if(this.displayItem==null)
 				displayItem=new ItemStack(IPStuff.postBase);
 			return this.displayItem;

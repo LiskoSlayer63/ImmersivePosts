@@ -12,7 +12,7 @@ public class IPBlock extends Block{
 		ResourceLocation res=new ResourceLocation(ModInfo.ID, name);
 		
 		setRegistryName(res);
-		setUnlocalizedName("immersiveposts."+name);
+		setTranslationKey("immersiveposts."+name);
 		setCreativeTab(ImmersivePosts.ipCreativeTab);
 		
 		IPStuff.BLOCKS.add(this);
