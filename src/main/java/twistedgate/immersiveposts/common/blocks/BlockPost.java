@@ -4,7 +4,6 @@ import blusunrize.immersiveengineering.api.IPostBlock;
 import blusunrize.immersiveengineering.common.util.Utils;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.properties.PropertyEnum;
@@ -12,7 +11,6 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -23,9 +21,21 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.property.IExtendedBlockState;
+import net.minecraftforge.common.property.IUnlistedProperty;
+import net.minecraftforge.common.property.Properties;
 import twistedgate.immersiveposts.util.BlockUtilities;
 
+/**
+ * All-in-one package. Containing everything into one neat class is the best.
+ * @author TwistedGate
+ */
 public class BlockPost extends IPBlock implements IPostBlock{
+	public static final IUnlistedProperty<Boolean> PARM_NORTH=Properties.toUnlisted(PropertyBool.create("hasNorth"));
+	public static final IUnlistedProperty<Boolean> PARM_EAST=Properties.toUnlisted(PropertyBool.create("hasEast"));
+	public static final IUnlistedProperty<Boolean> PARM_SOUTH=Properties.toUnlisted(PropertyBool.create("hasSouth"));
+	public static final IUnlistedProperty<Boolean> PARM_WEST=Properties.toUnlisted(PropertyBool.create("hasWest"));
+	
 	public static final PropertyDirection DIRECTION=PropertyDirection.create("facing");
 	public static final PropertyBool FLIP=PropertyBool.create("flip");
 	public static final PropertyEnum<EnumPostType> TYPE=PropertyEnum.create("type", EnumPostType.class);
@@ -56,11 +66,10 @@ public class BlockPost extends IPBlock implements IPostBlock{
 	
 	@Override
 	protected BlockStateContainer createBlockState(){
-		return new BlockStateContainer(this, new IProperty<?>[]{
-			DIRECTION,
-			FLIP,
-			TYPE
-		});
+		return new BlockStateContainer.Builder(this)
+				.add(DIRECTION).add(FLIP).add(TYPE)
+				.add(PARM_NORTH).add(PARM_EAST).add(PARM_SOUTH).add(PARM_WEST)
+				.build();
 	}
 	
 	@Override
@@ -80,14 +89,10 @@ public class BlockPost extends IPBlock implements IPostBlock{
 					case EAST:rot=1;break;
 					case SOUTH:rot=2;break;
 					case WEST:rot=3;break;
-					default:rot=0; // Aka North and Up or Down
+					default:rot=0; // Aka North, Up and Down
 				}
 				
-				if(state.getValue(FLIP)){
-					return 6+rot;
-				}else{
-					return 2+rot;
-				}
+				return (state.getValue(FLIP)?6:2)+rot;
 			}
 			default: return 0;
 		}
@@ -111,6 +116,15 @@ public class BlockPost extends IPBlock implements IPostBlock{
 			case 9: return state.withProperty(TYPE, EnumPostType.ARM).withProperty(FLIP, true).withProperty(DIRECTION, EnumFacing.WEST);
 			default: return state;
 		}
+	}
+	
+	@Override
+	public IBlockState getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos){
+		return ((IExtendedBlockState)state)
+				.withProperty(PARM_NORTH, canConnect(world, pos, EnumFacing.NORTH))
+				.withProperty(PARM_EAST, canConnect(world, pos, EnumFacing.EAST))
+				.withProperty(PARM_SOUTH, canConnect(world, pos, EnumFacing.SOUTH))
+				.withProperty(PARM_WEST, canConnect(world, pos, EnumFacing.WEST));
 	}
 	
 	@Override
@@ -152,11 +166,11 @@ public class BlockPost extends IPBlock implements IPostBlock{
 	public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player){
 		return this.postMaterial.getFenceItem();
 	}
-
+	
 	@Override
 	public boolean canConnectTransformer(IBlockAccess world, BlockPos pos){
 		IBlockState state=world.getBlockState(pos);
-		return state.getValue(TYPE)!=EnumPostType.ARM;
+		return state.getValue(TYPE)==EnumPostType.POST;
 	}
 	
 	
@@ -165,16 +179,31 @@ public class BlockPost extends IPBlock implements IPostBlock{
 		if(!worldIn.isRemote){
 			ItemStack held=playerIn.getHeldItemMainhand();
 			if(EnumPostMaterial.isFenceItem(held)){
-				
 				if(!held.isItemEqual(this.postMaterial.getFenceItem())){
 					playerIn.sendMessage(new TextComponentString("Expected: "+this.postMaterial.getFenceItem().getDisplayName()+"."));
 					return true;
 				}
 				
-				for(int y=1;y<(worldIn.getActualHeight()-pos.getY());y++){
+				for(int y=0;y<(worldIn.getActualHeight()-pos.getY());y++){
 					BlockPos nPos=pos.add(0,y,0);
 					
+					if((BlockUtilities.getBlockFrom(worldIn, nPos) instanceof BlockPost)){
+						IBlockState s=worldIn.getBlockState(nPos);
+						if(s.getValue(BlockPost.TYPE)==EnumPostType.ARM && s.getValue(BlockPost.FLIP)){
+							return true;
+						}
+						
+						BlockPos up=nPos.offset(EnumFacing.UP);
+						if((BlockUtilities.getBlockFrom(worldIn, up) instanceof BlockPost)){
+							s=worldIn.getBlockState(up);
+							if(s.getValue(BlockPost.TYPE)==EnumPostType.ARM){
+								return true;
+							}
+						}
+					}
+					
 					if(worldIn.isAirBlock(nPos)){
+						
 						IBlockState fb=null;
 						if(held.isItemEqual(EnumPostMaterial.WOOD.getFenceItem()))
 							fb=IPStuff.woodPost.getDefaultState().withProperty(BlockPost.TYPE, EnumPostType.POST_TOP);
@@ -203,21 +232,17 @@ public class BlockPost extends IPBlock implements IPostBlock{
 						switch(facing){
 							case NORTH:case EAST:case SOUTH:case WEST:{
 								BlockPos nPos=pos.offset(facing);
-								
 								if(worldIn.isAirBlock(nPos)){
 									worldIn.setBlockState(nPos, defaultState.withProperty(DIRECTION, facing), 3);
-								}else{
-									IBlockState stat=worldIn.getBlockState(nPos);
-									if(stat.getBlock() instanceof BlockPost){
-										if(state.getValue(TYPE)==EnumPostType.ARM && ((BlockPost)stat.getBlock()).postMaterial==this.postMaterial)
-											worldIn.setBlockToAir(nPos);
+								}else if(BlockUtilities.getBlockFrom(worldIn, nPos)==this){
+									if(worldIn.getBlockState(nPos).getValue(TYPE)==EnumPostType.ARM){
+										worldIn.setBlockToAir(nPos);
 									}
 								}
-								
-								return true;
 							}
-							default:return true;
+							default:break;
 						}
+						return true;
 					}
 					case ARM:{
 						worldIn.setBlockToAir(pos);
@@ -258,21 +283,36 @@ public class BlockPost extends IPBlock implements IPostBlock{
 				return;
 			}
 			
-			Block b=BlockUtilities.getBlockFromDirection(worldIn, pos, EnumFacing.UP);
-			if(b==Blocks.AIR){
-				Block b1=BlockUtilities.getBlockFromDirection(worldIn, pos, EnumFacing.DOWN);
-				if(b1!=this && b1!=Blocks.AIR){
-					worldIn.setBlockState(pos, state.withProperty(FLIP, true), 3);
-				}else{
-					worldIn.setBlockState(pos, state.withProperty(FLIP, false), 3);
-				}
+			if(canConnect(worldIn, pos, EnumFacing.UP)){
+				worldIn.setBlockState(pos, state.withProperty(FLIP, false), 3);
 			}
+			
+			boolean bool=canConnect(worldIn, pos, EnumFacing.DOWN);
+			worldIn.setBlockState(pos, state.withProperty(FLIP, bool), 3);
 		}
+	}
+	
+	static boolean canConnect(IBlockAccess world, BlockPos pos, EnumFacing facing){
+		BlockPos nPos=pos.offset(facing);
+		
+		if(world.isAirBlock(nPos) || BlockUtilities.getBlockFrom(world, nPos) instanceof IPostBlock)
+			return false;
+		
+		IBlockState state=world.getBlockState(nPos);
+		switch(facing){
+			case DOWN: return state.getBoundingBox(world, nPos).maxY>=1.0;
+			case UP: return state.getBoundingBox(world, nPos).minY<=0.0;
+			case SOUTH: return state.getBoundingBox(world, nPos).minZ>=1.0;
+			case NORTH: return state.getBoundingBox(world, nPos).minZ<=0.0;
+			case EAST: return state.getBoundingBox(world, nPos).maxX>=1.0;
+			case WEST: return state.getBoundingBox(world, nPos).maxX<=0.0;
+		}
+		return false;
 	}
 	
 	static final AxisAlignedBB POST_SHAPE=new AxisAlignedBB(0.3125F, 0.0F, 0.3125F, 0.6875F, 1.0F, 0.6875F);
 	
-	AxisAlignedBB stateBounds(IBlockAccess world, BlockPos pos, IBlockState state){
+	static AxisAlignedBB stateBounds(IBlockAccess world, BlockPos pos, IBlockState state){
 		switch(state.getValue(TYPE)){
 			case ARM:{
 				EnumFacing facing=state.getValue(DIRECTION);

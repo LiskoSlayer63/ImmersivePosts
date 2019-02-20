@@ -1,10 +1,13 @@
 package twistedgate.immersiveposts.common.blocks;
 
-import blusunrize.immersiveengineering.common.util.Utils;
+import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -13,15 +16,22 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import twistedgate.immersiveposts.util.BlockUtilities;
 
 public class BlockPostBase extends IPBlock{
-	
 	private static final AxisAlignedBB BASE_SIZE=new AxisAlignedBB(0.25F, 0.0F, 0.25F, 0.75F, 1.0F, 0.75F);
 	
 	public BlockPostBase(){
 		super(Material.ROCK, "postbase");
 		setResistance(3.0F);
 		setHardness(2.0F);
+		
+		IPStuff.ITEMS.add(new ItemPost(this));
+	}
+	
+	@Override
+	public boolean hasItem(){
+		return true;
 	}
 	
 	@Override
@@ -80,6 +90,13 @@ public class BlockPostBase extends IPBlock{
 				for(int i=1;i<(worldIn.getActualHeight()-pos.getY());i++){
 					BlockPos nPos=pos.add(0, i, 0);
 					
+					if((BlockUtilities.getBlockFrom(worldIn, nPos) instanceof BlockPost)){
+						IBlockState s=worldIn.getBlockState(nPos);
+						if(s.getValue(BlockPost.TYPE)==EnumPostType.ARM){
+							return true;
+						}
+					}
+					
 					if(worldIn.isAirBlock(nPos)){
 						IBlockState fb=null;
 						if(held.isItemEqual(EnumPostMaterial.WOOD.getFenceItem()))
@@ -105,6 +122,22 @@ public class BlockPostBase extends IPBlock{
 			}
 		}
 		
-		return Utils.isHammer(playerIn.getHeldItemMainhand()) || EnumPostMaterial.isFenceItem(playerIn.getHeldItemMainhand());
+		return EnumPostMaterial.isFenceItem(playerIn.getHeldItemMainhand());
+	}
+	
+	
+	public static class ItemPost extends ItemBlock{
+		public ItemPost(Block block){
+			super(block);
+			setRegistryName(block.getRegistryName());
+		}
+		
+		@Override
+		public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn){
+			tooltip.add("§6Accepted Fences:");
+			for(EnumPostMaterial t:EnumPostMaterial.values()){
+				tooltip.add("- §a"+t.getFenceItem().getDisplayName());
+			}
+		}
 	}
 }
